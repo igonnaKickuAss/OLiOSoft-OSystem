@@ -1,0 +1,372 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OLiOSoft.OSystem</name>
+    </assembly>
+    <members>
+        <member name="M:OLiOSoft.OSystem.Singleton.Abstracts.ASingletonMasterInternal`1.ComfirmSingletonMaster">
+            <summary>
+            确认Singleton_T
+            </summary>
+            <returns>T</returns>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Singleton.Abstracts.ASingletonMasterInternal`1.GetSingletonMaster">
+            <summary>
+            拿到单个主要的Singleton_T
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Singleton.Abstracts.ASingletonMasterInternal`1.SetSingletonMaster">
+            <summary>
+            设置单个主要的Singleton_T
+            </summary>
+        </member>
+        <member name="T:OLiOSoft.OSystem.Helpers.OLiOEventArgs`1">
+            <summary>
+            奥利奥事件参数，表示包含事件数据的类的基类，并提供用于不包含事件数据的事件的值。（封装了一下，就似让你知道转换成谁罢了）
+            </summary>
+            <typeparam name="T1Data">介个奥利奥事件参数所带的数据</typeparam>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOEventArgs`1.#ctor(`0)">
+            <summary>
+            给参数
+            </summary>
+            <param name="p_Data1">数据</param>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`1.Data1">
+            <summary>
+            As T1Data
+            </summary>
+        </member>
+        <member name="T:OLiOSoft.OSystem.Helpers.OLiOEventArgs`2">
+            <summary>
+            奥利奥事件参数， 表示包含事件数据的类的基类，并提供用于不包含事件数据的事件的值。（封装了一下，就似让你知道转换成谁罢了）
+            </summary>
+            <typeparam name="T1Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T2Data">介个奥利奥事件参数所带的数据</typeparam>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOEventArgs`2.#ctor(`0,`1)">
+            <summary>
+            给参数
+            </summary>
+            <param name="p_Data1">数据1</param>
+            <param name="p_Data2">数据2</param>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`2.Data1">
+            <summary>
+            As T1Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`2.Data2">
+            <summary>
+            As T2Data
+            </summary>
+        </member>
+        <member name="T:OLiOSoft.OSystem.Helpers.OLiOEventArgs`3">
+            <summary>
+            奥利奥事件参数，表示包含事件数据的类的基类，并提供用于不包含事件数据的事件的值。（封装了一下，就似让你知道转换成谁罢了）
+            </summary>
+            <typeparam name="T1Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T2Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T3Data">介个奥利奥事件参数所带的数据</typeparam>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOEventArgs`3.#ctor(`0,`1,`2)">
+            <summary>
+            给参数
+            </summary>
+            <param name="p_Data1">数据1</param>
+            <param name="p_Data2">数据2</param>
+            <param name="p_Data3">数据3</param>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`3.Data1">
+            <summary>
+            As T1Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`3.Data2">
+            <summary>
+            As T2Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`3.Data3">
+            <summary>
+            As T3Data
+            </summary>
+        </member>
+        <member name="T:OLiOSoft.OSystem.Helpers.OLiOEventArgs`4">
+            <summary>
+            奥利奥事件参数，表示包含事件数据的类的基类，并提供用于不包含事件数据的事件的值。（封装了一下，就似让你知道转换成谁罢了）
+            </summary>
+            <typeparam name="T1Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T2Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T3Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T4Data">介个奥利奥事件参数所带的数据</typeparam>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOEventArgs`4.#ctor(`0,`1,`2,`3)">
+            <summary>
+            给参数
+            </summary>
+            <param name="p_Data1">数据1</param>
+            <param name="p_Data2">数据2</param>
+            <param name="p_Data3">数据3</param>
+            <param name="p_Data4">数据4</param>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`4.Data1">
+            <summary>
+            As T1Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`4.Data2">
+            <summary>
+            As T2Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`4.Data3">
+            <summary>
+            As T3Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`4.Data4">
+            <summary>
+            As T4Data
+            </summary>
+        </member>
+        <member name="T:OLiOSoft.OSystem.Helpers.OLiOEventArgs`5">
+            <summary>
+            奥利奥事件参数，表示包含事件数据的类的基类，并提供用于不包含事件数据的事件的值。（封装了一下，就似让你知道转换成谁罢了）
+            </summary>
+            <typeparam name="T1Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T2Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T3Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T4Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T5Data">介个奥利奥事件参数所带的数据</typeparam>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOEventArgs`5.#ctor(`0,`1,`2,`3,`4)">
+            <summary>
+            给参数
+            </summary>
+            <param name="p_Data1">数据1</param>
+            <param name="p_Data2">数据2</param>
+            <param name="p_Data3">数据3</param>
+            <param name="p_Data4">数据4</param>
+            <param name="p_Data5">数据5</param>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`5.Data1">
+            <summary>
+            As T1Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`5.Data2">
+            <summary>
+            As T2Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`5.Data3">
+            <summary>
+            As T3Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`5.Data4">
+            <summary>
+            As T4Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`5.Data5">
+            <summary>
+            As T5Data
+            </summary>
+        </member>
+        <member name="T:OLiOSoft.OSystem.Helpers.OLiOEventArgs`6">
+            <summary>
+            奥利奥事件参数，表示包含事件数据的类的基类，并提供用于不包含事件数据的事件的值。（封装了一下，就似让你知道转换成谁罢了）
+            </summary>
+            <typeparam name="T1Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T2Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T3Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T4Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T5Data">介个奥利奥事件参数所带的数据</typeparam>
+            <typeparam name="T6Data">介个奥利奥事件参数所带的数据</typeparam>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOEventArgs`6.#ctor(`0,`1,`2,`3,`4,`5)">
+            <summary>
+            给参数
+            </summary>
+            <param name="p_Data1">数据1</param>
+            <param name="p_Data2">数据2</param>
+            <param name="p_Data3">数据3</param>
+            <param name="p_Data4">数据4</param>
+            <param name="p_Data5">数据5</param>
+            <param name="p_Data6">数据6</param>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`6.Data1">
+            <summary>
+            As T1Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`6.Data2">
+            <summary>
+            As T2Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`6.Data3">
+            <summary>
+            As T3Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`6.Data4">
+            <summary>
+            As T4Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`6.Data5">
+            <summary>
+            As T5Data
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOEventArgs`6.Data6">
+            <summary>
+            As T6Data
+            </summary>
+        </member>
+        <member name="T:OLiOSoft.OSystem.Helpers.OLiOTask`2">
+            <summary>
+            奥利奥任务，包含任务数据
+            </summary>
+            <typeparam name="TRunEventArgs">介个任务运行方法的数据</typeparam>
+            <typeparam name="TCancelEventArgs">介个任务结束方法的数据</typeparam>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOTask`2.#ctor(`0,`1)">
+            <summary>
+            喂给他一个任务运行数据，一个任务结束数据
+            </summary>
+            <param name="p_RunEventArgs">介个任务运行方法的数据</param>
+            <param name="p_CancelEventArgs">介个任务结束方法的数据</param>
+        </member>
+        <member name="E:OLiOSoft.OSystem.Helpers.OLiOTask`2.CoreRunCompletedEventHandles">
+            <summary>
+            运行方法完成事件，运行方法完成后调用
+            </summary>
+        </member>
+        <member name="E:OLiOSoft.OSystem.Helpers.OLiOTask`2.CoreCancelCompletedEventHandles">
+            <summary>
+            结束方法完成事件，结束方法完成后调用
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOTask`2.CoreRun">
+            <summary>
+            喂给介个任务一个运行方法
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOTask`2.CoreCancel">
+            <summary>
+            喂给介个任务一个停止方法
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOTask`2.IsRunning">
+            <summary>
+            介个任务似否已经正在运行了
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOTask`2.IsCanceling">
+            <summary>
+            介个任务似否已经正在停止了
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOTask`2.TimeLimit">
+            <summary>
+            等待次数限制（一次等待，周期时间为六秒）
+            </summary>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOTask`2.Start">
+            <summary>
+            同步的方式开始介个任务的运行方法，并且阻塞当前线程
+            </summary>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOTask`2.StartAsync">
+            <summary>
+            异步的方式开始介个任务的运行方法，不阻塞当前线程
+            </summary>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOTask`2.Stop">
+            <summary>
+            （一般用来让运行方法停止）同步的方式开始介个任务的停止方法，并且阻塞当前线程
+            </summary>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOTask`2.StopAsync">
+            <summary>
+            （一般用来让运行方法停止）异步的方式开始介个任务的停止方法，不阻塞当前线程
+            </summary>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOTask`2.Await">
+            <summary>
+            等待介个任务的运行方法完成，并且阻塞当前线程
+            </summary>
+            <returns>若介个任务的运行方法在指定等待时间内完成的返回真，否则假</returns>
+        </member>
+        <member name="T:OLiOSoft.OSystem.Helpers.OLiOTaskEventArgs`1">
+            <summary>
+            奥利奥任务的奥利奥事件参数，包含任务运行数据和任务运行canceltoken
+            </summary>
+            <typeparam name="TEventArgs">事件参数（最好用奥利奥事件参数）</typeparam>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOTaskEventArgs`1.#ctor(`0,System.Threading.CancellationToken)">
+            <summary>
+            喂给他一个奥利奥事件参数
+            </summary>
+            <param name="p_EventArgs">奥利奥事件参数</param>
+            <param name="p_CancelToken"></param>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOTaskEventArgs`1.Current">
+            <summary>
+            当前事件参数
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOTaskEventArgs`1.Cancelled">
+            <summary>
+            该线程似否退出
+            </summary>
+        </member>
+        <member name="T:OLiOSoft.OSystem.Helpers.OLiOTimer">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOTimer.#ctor(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="limit"></param>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOTimer.TimeToGiveUp">
+            <summary>
+            似否已经等待完成？
+            </summary>
+        </member>
+        <member name="P:OLiOSoft.OSystem.Helpers.OLiOTimer.TimeLimit">
+            <summary>
+            次数限制
+            </summary>
+        </member>
+        <member name="M:OLiOSoft.OSystem.Helpers.OLiOTimer.YouCanDoNothing">
+            <summary>
+            阻塞当前栈limit秒
+            </summary>
+        </member>
+        <member name="T:OLiOSoft.OSystem.OLiOSingletonMaster`1">
+            <summary>
+            继承了介个的类，是一个单例
+            </summary>
+            <typeparam name="T">你的类</typeparam>
+        </member>
+        <member name="P:OLiOSoft.OSystem.OLiOSingletonMaster`1.CreateSingletonMaster">
+            <summary>
+            拿到你要的单例
+            </summary>
+        </member>
+        <member name="M:OLiOSoft.OSystem.OLiOSingletonMaster`1.#ctor(System.Int32)">
+            <summary>
+            记得把构造函数设为私有
+            </summary>
+            <param name="fourBytes">为了提醒你把构造函数设为私有的形参罢了</param>
+        </member>
+    </members>
+</doc>
