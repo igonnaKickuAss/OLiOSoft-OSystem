@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,54 +12,137 @@ using System.Threading.Tasks;
 namespace OLiOSoft.OSystem.Helpers
 {
     /// <summary>
-    /// 奥利奥任务，包含任务数据
+    /// （没写完）奥利奥任务，包含任务数据
     /// </summary>
-    /// <typeparam name="TRunEventArgs">介个任务运行方法的数据</typeparam>
-    /// <typeparam name="TCancelEventArgs">介个任务结束方法的数据</typeparam>
-    sealed public class OLiOTask<TRunEventArgs, TCancelEventArgs>
-        where TRunEventArgs : EventArgs
-        where TCancelEventArgs : EventArgs
+    sealed class OLiOTask
     {
         /// <summary>
-        /// 喂给他一个任务运行数据，一个任务结束数据
+        /// 
         /// </summary>
-        /// <param name="p_RunEventArgs">介个任务运行方法的数据</param>
-        /// <param name="p_CancelEventArgs">介个任务结束方法的数据</param>
-        public OLiOTask(TRunEventArgs p_RunEventArgs, TCancelEventArgs p_CancelEventArgs)
+        public struct Messages
         {
-            runEventArgs = p_RunEventArgs;
-            cancelEventArgs = p_CancelEventArgs;
+            public Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> runsMapperQueue;
 
-            //timer = new OLiOTimer();
+            public Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> cancelsMapperQueue;
+
+            public Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> runsMapperQueueReady;
+
+            public Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> cancelsMapperQueueReady;
+
+            public Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> runsMapperQueueStore;
+
+            public Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> cancelsMapperQueueStore;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Messages GetMessages
+        {
+            get
+            {
+                return new Messages
+                {
+                    runsMapperQueue = this.runsMapperQueue,
+
+                    cancelsMapperQueue = this.cancelsMapperQueue,
+
+                    runsMapperQueueReady = this.runsMapperQueueReady,
+
+                    cancelsMapperQueueReady = this.cancelsMapperQueueReady,
+
+                    runsMapperQueueStore = this.runsMapperQueueStore,
+
+                    cancelsMapperQueueStore = this.cancelsMapperQueueStore
+                };
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public OLiOTask()
+        {
+            lockObj = new object();
+
+            runsMapperQueue = new Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>>();
+
+            cancelsMapperQueue = new Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>>();
+
+            runsMapperQueueReady = new Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>>();
+
+            cancelsMapperQueueReady = new Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>>();
+
+            runsMapperQueueStore = new Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>>();
+
+            cancelsMapperQueueStore = new Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>>();
         }
 
         #region -- Private Data --
-        private readonly TRunEventArgs runEventArgs;
-        private readonly TCancelEventArgs cancelEventArgs;
+        //need to new
+        readonly private object lockObj = null;
 
-        private OLiOTaskEventArgs<EventArgs> taskRunEventArgs = null;
-        private OLiOTaskEventArgs<EventArgs> taskCancelEventArgs = null;
+        /// <summary>
+        /// shared data..
+        /// taskCoreMapperQueue（key: type, value: taskCore(taskCoreMethods)
+        /// </summary>
+        private Queue<
+            Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>
+            > runsMapperQueue = null;
+
+        /// <summary>
+        /// shared data..
+        /// taskCoreMapperQueue（key: type, value: taskCore(taskCoreMethods)
+        /// </summary>
+        private Queue<
+            Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>
+            > cancelsMapperQueue = null;
+
+        /// <summary>
+        /// shared data..
+        /// taskCoreMapperQueue（key: type, value: taskCore(taskCoreMethods)
+        /// </summary>
+        private Queue<
+            Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>
+            > runsMapperQueueStore = null;
+
+        /// <summary>
+        /// shared data..
+        /// taskCoreMapperQueue（key: type, value: taskCore(taskCoreMethods)
+        /// </summary>
+        private Queue<
+            Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>
+            > cancelsMapperQueueStore = null;
+
+        /// <summary>
+        /// noshared data..
+        /// taskCoreMapperQueue（key: type, value: taskCore(taskCoreMethods)
+        /// </summary>
+        private Queue<
+            Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>
+            > runsMapperQueueReady = null;
+
+        /// <summary>
+        /// noshared data..
+        /// taskCoreMapperQueue（key: type, value: taskCore(taskCoreMethods)
+        /// </summary>
+        private Queue<
+            Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>
+            > cancelsMapperQueueReady = null;
+
+
         private CancellationTokenSource taskRun_CancelTokenSource = null;
         private CancellationTokenSource taskCancel_CancelTokenSource = null;
 
         private Task taskRun = null;
         private Task taskCancel = null;
 
-        //private OLiOTimer timer = null;
+        private AsyncCompletedEventHandler runCompletedEventHandler = null;
+        private AsyncCompletedEventHandler cancelCompletedEventHandler = null;
 
-        private AsyncCompletedEventHandler coreRunCompletedEventHandler = null;
-        private AsyncCompletedEventHandler coreCancelCompletedEventHandler = null;
-
-        private Action<
-            object,
-            OLiOTaskEventArgs<EventArgs>
-            > coreRun = null;
-        private Action<
-            object,
-            OLiOTaskEventArgs<EventArgs>
-            > coreCancel = null;
         private bool isRunning = false;
         private bool isCanceling = false;
+        private bool isModifying = false;
         private int timeLimit = 5;
 
         #endregion
@@ -70,13 +154,20 @@ namespace OLiOSoft.OSystem.Helpers
         public event AsyncCompletedEventHandler CoreRunCompletedEventHandles
         {
             add {
-                if (coreRunCompletedEventHandler == null)
-                    coreRunCompletedEventHandler += value;
+                if (runHandleCurrent > handleLimit)
+                    return;
+
+                runHandleCurrent = runHandleCurrent.MinusTo_NoLessThanZero(1);
+
+                runCompletedEventHandler += value;
             }
             remove {
-                if (coreRunCompletedEventHandler == null)
+                if (runCompletedEventHandler == null)
                     return;
-                coreRunCompletedEventHandler -= value;
+
+                runHandleCurrent = runHandleCurrent.MinusTo_NoLessThanZero(1);
+
+                runCompletedEventHandler -= value;
             }
         }
 
@@ -86,35 +177,33 @@ namespace OLiOSoft.OSystem.Helpers
         public event AsyncCompletedEventHandler CoreCancelCompletedEventHandles
         {
             add {
-                if (coreCancelCompletedEventHandler == null)
-                    coreCancelCompletedEventHandler += value;
+                if (cancelHandleCurrent > handleLimit)
+                    return;
+
+                cancelHandleCurrent++;
+
+                cancelCompletedEventHandler += value;
             }
             remove {
-                if (coreCancelCompletedEventHandler == null)
+                if (cancelCompletedEventHandler == null)
                     return;
-                coreCancelCompletedEventHandler -= value;
+                cancelCompletedEventHandler -= value;
             }
         }
 
         #endregion
 
+        #region -- Var --
+        int handleLimit = 3;
+        int runHandleCurrent = 0;
+        int cancelHandleCurrent = 0;
+        int timeSpan = 1000;
+        int stateRun = 0;
+        int stateCancel = 0;
+
+        #endregion
+
         #region -- Public ShotC --
-        /// <summary>
-        /// 喂给介个任务一个运行方法
-        /// </summary>
-        public Action<
-            object,
-            OLiOTaskEventArgs<EventArgs>
-            > CoreRun { set => coreRun = value; }
-
-        /// <summary>
-        /// 喂给介个任务一个停止方法
-        /// </summary>
-        public Action<
-            object,
-            OLiOTaskEventArgs<EventArgs>
-            > CoreCancel { set => coreCancel = value; }
-
         /// <summary>
         /// 介个任务似否已经正在运行了
         /// </summary>
@@ -126,14 +215,14 @@ namespace OLiOSoft.OSystem.Helpers
         public bool IsCanceling { get => isCanceling; }
         
         /// <summary>
-        /// 等待次数限制（一次等待，周期时间为六秒）
+        /// 介个任务似否有添加新的方法序列
         /// </summary>
-        public int TimeLimit { get => timeLimit; set => timeLimit = value; }
+        public bool IsModifying { get => isModifying; }
 
-        #endregion
-
-        #region -- Var --
-        private int timeSpan = 6000;
+        /// <summary>
+        /// 
+        /// </summary>
+        public int TimeLimit { get => timeLimit; }
 
         #endregion
 
@@ -141,42 +230,56 @@ namespace OLiOSoft.OSystem.Helpers
         /// <summary>
         /// 同步的方式开始介个任务的运行方法，并且阻塞当前线程
         /// </summary>
-        public void Start()
+        public void Start(object p_Sender, params Action<object, OLiOTaskEventArgs>[] p_TaskCoreMethods)
         {
-            if (isRunning)
+            if (p_Sender == null)
                 return;
 
-            //cancel_token
-            taskRun_CancelTokenSource = new CancellationTokenSource();
+            if (p_TaskCoreMethods != null && p_TaskCoreMethods.Length > 0)
+            {
+                Type type = p_Sender.GetType();
 
-            //taskRunMethod_data
-            taskRunEventArgs = new OLiOTaskEventArgs<EventArgs>(
-                runEventArgs,
-                taskRun_CancelTokenSource.Token
-                );
+                InsertToMapperQueue(ref type, ref p_TaskCoreMethods, ref this.runsMapperQueue);
+            }
+
+            if (isRunning || stateRun > 0)
+                return;
+
+            stateRun++;
+
+
+            //taskRunCancel_token
+            taskRun_CancelTokenSource = new CancellationTokenSource();
 
             //taskRun
             taskRun = new Task(TaskRunMethod, taskRun_CancelTokenSource.Token);
 
+            //taskRunStartSync
             taskRun.RunSynchronously();
         }
 
         /// <summary>
         /// 异步的方式开始介个任务的运行方法，不阻塞当前线程
         /// </summary>
-        public void StartAsync()
+        public void StartAsync(object p_Sender, params Action<object, OLiOTaskEventArgs>[] p_TaskCoreMethods)
         {
-            if (isRunning)
+            if (p_Sender == null)
                 return;
+
+            if (p_TaskCoreMethods != null && p_TaskCoreMethods.Length > 0)
+            {
+                Type type = p_Sender.GetType();
+
+                InsertToMapperQueue(ref type, ref p_TaskCoreMethods, ref this.runsMapperQueue);
+            }
+
+            if (isRunning || stateRun > 0)
+                return;
+
+            stateRun++;
 
             //cancel_token
             taskRun_CancelTokenSource = new CancellationTokenSource();
-
-            //taskRunMethod_data
-            taskRunEventArgs = new OLiOTaskEventArgs<EventArgs>(
-                runEventArgs,
-                taskRun_CancelTokenSource.Token
-                );
 
             //taskRun
             taskRun = new Task(TaskRunMethod, taskRun_CancelTokenSource.Token);
@@ -187,19 +290,25 @@ namespace OLiOSoft.OSystem.Helpers
         /// <summary>
         /// （一般用来让运行方法停止）同步的方式开始介个任务的停止方法，并且阻塞当前线程
         /// </summary>
-        public void Stop()
+        public void Stop(object p_Sender, params Action<object, OLiOTaskEventArgs>[] p_TaskCoreMethods)
         {
-            if (!isRunning || isCanceling)
+            if (p_Sender == null)
                 return;
+
+            if (p_TaskCoreMethods != null && p_TaskCoreMethods.Length > 0)
+            {
+                Type type = p_Sender.GetType();
+
+                InsertToMapperQueue(ref type, ref p_TaskCoreMethods, ref this.cancelsMapperQueue);
+            }
+
+            if (!isRunning || isCanceling || stateCancel > 0)
+                return;
+
+            stateCancel++;
 
             //cancel_token
             taskCancel_CancelTokenSource = new CancellationTokenSource();
-
-            //taskCancelMethod_data
-            taskCancelEventArgs = new OLiOTaskEventArgs<EventArgs>(
-                cancelEventArgs,
-                taskCancel_CancelTokenSource.Token
-                );
 
             //taskCancel
             taskCancel = new Task(TaskCancelMethod, taskCancel_CancelTokenSource.Token);
@@ -210,19 +319,25 @@ namespace OLiOSoft.OSystem.Helpers
         /// <summary>
         /// （一般用来让运行方法停止）异步的方式开始介个任务的停止方法，不阻塞当前线程
         /// </summary>
-        public void StopAsync()
+        public void StopAsync(object p_Sender, params Action<object, OLiOTaskEventArgs>[] p_TaskCoreMethods)
         {
-            if (!isRunning || isCanceling)
+            if (p_Sender == null)
                 return;
+
+            if (p_TaskCoreMethods != null && p_TaskCoreMethods.Length > 0)
+            {
+                Type type = p_Sender.GetType();
+
+                InsertToMapperQueue(ref type, ref p_TaskCoreMethods, ref this.cancelsMapperQueue);
+            }
+
+            if (!isRunning || isCanceling || stateCancel > 0)
+                return;
+
+            stateCancel++;
 
             //cancel_token
             taskCancel_CancelTokenSource = new CancellationTokenSource();
-
-            //taskCancelMethod_data
-            taskCancelEventArgs = new OLiOTaskEventArgs<EventArgs>(
-                cancelEventArgs,
-                taskCancel_CancelTokenSource.Token
-                );
 
             //taskCancel
             taskCancel = new Task(TaskCancelMethod, taskCancel_CancelTokenSource.Token);
@@ -258,50 +373,142 @@ namespace OLiOSoft.OSystem.Helpers
 
         #endregion
 
-        #region -- Private APIMethods --
+        #region -- Task APIMethods --
         private void TaskRunMethod()
         {
-            if (coreRun == null)
-                return;
-
             isRunning = true;
 
-            //timer.YouCanDoNothing();
+            IEnumerator workFlow = GetWorkFlow();
 
-            coreRun.Invoke(this, taskRunEventArgs);
+            while (workFlow.MoveNext())
+            {
+                //Console.WriteLine($"0runsMapperQueue:{GetMessages.runsMapperQueue.Count}");
+                //Console.WriteLine($"0runsMapperQueueReady:{GetMessages.runsMapperQueueReady.Count}");
+                //Console.WriteLine($"0runsMapperQueueStore:{GetMessages.runsMapperQueueStore.Count}");
 
+                IEnumerator runs = GetRuns();
+
+                while (runs.MoveNext())
+                    Thread.Sleep(1000);
+
+                //Console.WriteLine($"1runsMapperQueue:{GetMessages.runsMapperQueue.Count}");
+                //Console.WriteLine($"1runsMapperQueueReady:{GetMessages.runsMapperQueueReady.Count}");
+                //Console.WriteLine($"1runsMapperQueueStore:{GetMessages.runsMapperQueueStore.Count}");
+            }
+
+            stateRun = 0;
             isRunning = false;
-
-            if (coreRunCompletedEventHandler == null)
-                return;
-
-            coreRunCompletedEventHandler.Invoke(
-                this,
-                new AsyncCompletedEventArgs(null, taskRunEventArgs.Cancelled, null)
-                );
         }
 
         private void TaskCancelMethod()
         {
-            if (coreCancel == null)
-                return;
-
             isCanceling = true;
 
-            //timer.YouCanDoNothing();
-            taskRun_CancelTokenSource.Cancel();
+            this.taskRun_CancelTokenSource.Cancel();
 
-            coreCancel.Invoke(this, taskCancelEventArgs);
-
+            stateCancel = 0;
             isCanceling = false;
+        }
 
-            if (coreCancelCompletedEventHandler == null)
-                return;
+        #endregion
 
-            coreCancelCompletedEventHandler.Invoke(
-                this,
-                new AsyncCompletedEventArgs(null, taskCancelEventArgs.Cancelled, null)
+        #region -- Private APIMethods --
+        private IEnumerator GetWorkFlow()
+        {
+            while (this.runsMapperQueue.Count > 0)
+            {
+                this.runsMapperQueueReady.Enqueue(this.runsMapperQueue.Dequeue());
+
+                yield return null;
+            }
+
+            yield break;
+        }
+
+        private IEnumerator GetRuns()
+        {
+            while (this.runsMapperQueueReady.Count > 0 && !taskRun_CancelTokenSource.Token.IsCancellationRequested)
+            {
+                Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>> runsMapper =
+                    this.runsMapperQueueReady.Dequeue();
+
+                Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>.Enumerator enumerator =
+                    runsMapper.GetEnumerator();
+
+                Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>> _runsMapper =
+                    new Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>();
+
+                Queue<Action<object, OLiOTaskEventArgs>> _runs = new Queue<Action<object, OLiOTaskEventArgs>>();
+                
+                while (enumerator.MoveNext())
+                {
+                    Type type = enumerator.Current.Key;
+
+                    Queue<Action<object, OLiOTaskEventArgs>> runs = enumerator.Current.Value;
+
+                    while (runs.Count > 0)
+                    {
+                        Action<object, OLiOTaskEventArgs> run = runs.Dequeue();
+
+                        run.Invoke(type, new OLiOTaskEventArgs(this.taskRun_CancelTokenSource.Token));
+
+                        _runs.Enqueue(run);
+                    }
+
+                    _runsMapper[type] = _runs;
+                }
+
+                //TODO.. 回收
+                RecycleToMapperQueueStore(ref _runsMapper, ref this.runsMapperQueueStore);
+            }
+
+            if (taskRun_CancelTokenSource.Token.IsCancellationRequested)
+                RecycleToMapperQueueStore(ref this.runsMapperQueue, ref this.runsMapperQueueStore);                //TODO.. 回收
+
+            yield break;
+        }
+        
+
+        //private IEnumerator<bool> TaskCancel()
+        //{
+
+        //}
+
+        private void RecycleToMapperQueueStore(
+            ref Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>> p_TaskCoreMapperReady,
+            ref Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> p_TaskCoreMapperQueueStore
+            )
+        {
+            lock (lockObj)
+                p_TaskCoreMapperQueueStore.Enqueue(p_TaskCoreMapperReady);
+        }
+
+        private void RecycleToMapperQueueStore(
+            ref Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> p_TaskCoreMapperQueue,
+            ref Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> p_TaskCoreMapperQueueStore
+            )
+        {
+            lock (lockObj)
+                while (p_TaskCoreMapperQueue.Count > 0)
+                    p_TaskCoreMapperQueueStore.Enqueue(p_TaskCoreMapperQueue.Dequeue());
+        }
+
+        private void InsertToMapperQueue(
+            ref Type p_Type,
+            ref Action<object, OLiOTaskEventArgs>[] p_TaskCoreMethods,
+            ref Queue<Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>> p_TaskCoreMapperQueue)
+        {
+            Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>> taskCoreMapper =
+                new Dictionary<Type, Queue<Action<object, OLiOTaskEventArgs>>>();
+
+            taskCoreMapper.Add(
+                p_Type,
+                new Queue<Action<object, OLiOTaskEventArgs>>(p_TaskCoreMethods)
                 );
+
+            lock (lockObj)
+                p_TaskCoreMapperQueue.Enqueue(taskCoreMapper);
+
         }
 
         #endregion
